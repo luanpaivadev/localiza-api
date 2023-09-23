@@ -1,0 +1,7 @@
+springdoc:
+  # Disabling the /v3/api-docs endpoint
+  api-docs:
+    enabled: false
+  # Disabling the swagger-ui
+  swagger-ui:
+    enabled: false
