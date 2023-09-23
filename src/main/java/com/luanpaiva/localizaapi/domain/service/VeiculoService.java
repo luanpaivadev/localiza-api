@@ -2,10 +2,8 @@ package com.luanpaiva.localizaapi.domain.service;
 
 import com.luanpaiva.localizaapi.domain.exception.VeiculoNaoLocalizadoException;
 import com.luanpaiva.localizaapi.domain.model.Veiculo;
-import com.luanpaiva.localizaapi.domain.repository.VeiculoRepository;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.luanpaiva.localizaapi.domain.port.VeiculoRepositoryPort;
+import com.luanpaiva.localizaapi.domain.port.VeiculoServicePort;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -13,28 +11,31 @@ import java.util.Optional;
 
 import static java.text.MessageFormat.format;
 
-@Service
-@AllArgsConstructor
-public class VeiculoService {
+public class VeiculoService implements VeiculoServicePort {
 
-    private final VeiculoRepository veiculoRepository;
+    private final VeiculoRepositoryPort veiculoRepositoryPort;
 
+    public VeiculoService(VeiculoRepositoryPort veiculoRepositoryPort) {
+        this.veiculoRepositoryPort = veiculoRepositoryPort;
+    }
+
+    @Override
     public List<Veiculo> buscarListaVeiculos() {
-        return veiculoRepository.findAll();
+        return veiculoRepositoryPort.findAll();
     }
 
     public Veiculo buscarVeiculoPelaPlaca(String placa) {
-        Optional<Veiculo> veiculoOptional = veiculoRepository.findByPlaca(placa);
+        Optional<Veiculo> veiculoOptional = veiculoRepositoryPort.findByPlaca(placa);
         return veiculoOptional.orElseThrow(() -> new VeiculoNaoLocalizadoException(
                 format("Veículo com placa {0} não localizado.", placa)));
     }
 
-    @Transactional
+    @Override
     public Veiculo salvarVeiculo(Veiculo veiculo) {
-        return veiculoRepository.save(veiculo);
+        return veiculoRepositoryPort.save(veiculo);
     }
 
-    @Transactional
+    @Override
     public Veiculo atualizarValorDiariaAluguel(String placa, BigDecimal valorDiariaVeiculo) {
         Veiculo veiculo = buscarVeiculoPelaPlaca(placa);
         veiculo.setValorDiariaAluguel(valorDiariaVeiculo);

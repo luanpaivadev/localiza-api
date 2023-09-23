@@ -14,7 +14,7 @@ spring:
 
 springdoc:
   packages-to-scan:
-    - com.luanpaiva.localizaapi.api
+    - com.luanpaiva.localizaapi.adapter.input.api
   paths-to-match:
     - /v1/**
 

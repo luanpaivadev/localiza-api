@@ -2,31 +2,35 @@ package com.luanpaiva.localizaapi.domain.service;
 
 import com.luanpaiva.localizaapi.domain.exception.ClienteNaoLocalizadoException;
 import com.luanpaiva.localizaapi.domain.model.Cliente;
-import com.luanpaiva.localizaapi.domain.repository.ClienteRespository;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import com.luanpaiva.localizaapi.domain.port.CepServicePort;
+import com.luanpaiva.localizaapi.domain.port.ClienteRespositoryPort;
+import com.luanpaiva.localizaapi.domain.port.ClienteServicePort;
 
 import java.util.Optional;
 
 import static java.text.MessageFormat.format;
 
-@Service
-@AllArgsConstructor
-public class ClienteService {
+public class ClienteService implements ClienteServicePort {
 
-    private final ClienteRespository clienteRespository;
-    private final CepService cepService;
+    private final ClienteRespositoryPort clienteRespositoryPort;
+    private final CepServicePort cepServicePort;
 
-    public Cliente buscarClientePeloCpf(String cpf) {
-        Optional<Cliente> cliente = clienteRespository.findByCpf(cpf);
-        return cliente.orElseThrow(() -> new ClienteNaoLocalizadoException(format("Cliente com CPF {0} não localizado.", cpf)));
+    public ClienteService(ClienteRespositoryPort clienteRespositoryPort, CepServicePort cepServicePort) {
+        this.clienteRespositoryPort = clienteRespositoryPort;
+        this.cepServicePort = cepServicePort;
     }
 
-    @Transactional
+    @Override
+    public Cliente buscarClientePeloCpf(String cpf) {
+        Optional<Cliente> cliente = clienteRespositoryPort.findByCpf(cpf);
+        return cliente.orElseThrow(() -> new ClienteNaoLocalizadoException(
+                format("Cliente com CPF {0} não localizado.", cpf)));
+    }
+
+    @Override
     public Cliente salvarCliente(Cliente cliente, String cep) {
-        Cliente.Endereco endereco = cepService.consultarEnderecoPorCep(cep);
+        Cliente.Endereco endereco = cepServicePort.consultarEnderecoPorCep(cep);
         cliente.setEndereco(endereco);
-        return clienteRespository.save(cliente);
+        return clienteRespositoryPort.save(cliente);
     }
 }

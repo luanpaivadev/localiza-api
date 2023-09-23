@@ -1,20 +1,23 @@
 package com.luanpaiva.localizaapi.domain.service;
 
+import com.luanpaiva.localizaapi.adapter.input.api.v1.model.response.CepResponse;
 import com.luanpaiva.localizaapi.domain.exception.CepInvalidoException;
-import com.luanpaiva.localizaapi.api.v1.model.response.CepResponse;
 import com.luanpaiva.localizaapi.domain.model.Cliente;
-import com.luanpaiva.localizaapi.domain.repository.CepClient;
-import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
+import com.luanpaiva.localizaapi.domain.port.CepClientPort;
+import com.luanpaiva.localizaapi.domain.port.CepServicePort;
+import com.luanpaiva.localizaapi.domain.port.ModelMapperPort;
 
-@Service
-@AllArgsConstructor
-public class CepService {
+public class CepService implements CepServicePort {
 
-    private final CepClient cepClient;
-    private final ModelMapper modelMapper;
+    private final CepClientPort cepClientPort;
+    private final ModelMapperPort<CepResponse, Cliente.Endereco> modelMapperPort;
 
+    public CepService(CepClientPort cepClientPort, ModelMapperPort<CepResponse, Cliente.Endereco> modelMapperPort) {
+        this.cepClientPort = cepClientPort;
+        this.modelMapperPort = modelMapperPort;
+    }
+
+    @Override
     public Cliente.Endereco consultarEnderecoPorCep(String cep) {
 
         cep = cep.replaceAll("\\D", "");
@@ -23,7 +26,7 @@ public class CepService {
             throw new CepInvalidoException("Cep inválido");
         }
 
-        CepResponse cepResponse = cepClient.consultarCep(cep);
-        return modelMapper.map(cepResponse, Cliente.Endereco.class);
+        CepResponse cepResponse = cepClientPort.consultarCep(cep);
+        return modelMapperPort.map(cepResponse, Cliente.Endereco.class);
     }
 }
