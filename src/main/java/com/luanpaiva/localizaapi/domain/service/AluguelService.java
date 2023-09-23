@@ -23,7 +23,7 @@ import static java.time.Duration.between;
 
 public class AluguelService implements AluguelServicePort {
 
-    public static final Boolean NAO = FALSE;
+    private static final Boolean NAO = FALSE;
     private final AluguelRepositoryPort aluguelRepositoryPort;
     private final ClienteServicePort clienteServicePort;
     private final VeiculoServicePort veiculoServicePort;
@@ -70,8 +70,8 @@ public class AluguelService implements AluguelServicePort {
                                            BigDecimal valorDiaria) {
 
         Duration duracaoAluguel = between(dataHoraRetirada, dataHoraDevolucao);
-        BigDecimal custoPorHora = valueOf(valorDiaria.doubleValue() / 24);
         BigDecimal duracaoHoras = valueOf((double) duracaoAluguel.toMinutes() / 60);
+        BigDecimal custoPorHora = valueOf(valorDiaria.doubleValue() / 24);
 
         return duracaoHoras.multiply(custoPorHora).setScale(2, RoundingMode.HALF_UP);
     }
