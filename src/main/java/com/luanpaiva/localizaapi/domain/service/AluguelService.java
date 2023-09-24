@@ -53,19 +53,18 @@ public class AluguelService implements AluguelServicePort {
 
         veiculo.setDisponivel(NAO);
         LocalDateTime dataHoraRetirada = aluguelInput.getDataHoraRetirada();
-        LocalDateTime dataHoraDevolucao = aluguelInput.getDataHoraDevolucao();
+        LocalDateTime dataHoraDevolucaoPrevista = aluguelInput.getDataHoraDevolucao();
 
-        BigDecimal custoAluguel = calcularCustoAluguel(dataHoraRetirada, dataHoraDevolucao, veiculo.getValorDiariaAluguel());
+        BigDecimal valorPrevisto = calcularCustoAluguel(dataHoraRetirada, dataHoraDevolucaoPrevista, veiculo.getValorDiariaAluguel());
 
-        Aluguel aluguel = Aluguel.builder()
-                .cliente(cliente)
-                .veiculo(veiculo)
-                .dataHoraRetirada(dataHoraRetirada)
-                .dataHoraDevolucaoPrevista(dataHoraDevolucao)
-                .valorPrevisto(custoAluguel)
-                .valorExcedente(BigDecimal.ZERO)
-                .statusAluguel(ABERTO)
-                .build();
+        Aluguel aluguel = new Aluguel();
+        aluguel.setCliente(cliente);
+        aluguel.setVeiculo(veiculo);
+        aluguel.setDataHoraRetirada(dataHoraRetirada);
+        aluguel.setDataHoraDevolucaoPrevista(dataHoraDevolucaoPrevista);
+        aluguel.setValorPrevisto(valorPrevisto);
+        aluguel.setValorExcedente(BigDecimal.ZERO);
+        aluguel.setStatusAluguel(ABERTO);
 
         return aluguelRepositoryPort.save(aluguel);
     }

@@ -1,7 +1,6 @@
 package com.luanpaiva.localizaapi.adapter.input.api.v1.handler;
 
 import com.luanpaiva.localizaapi.adapter.input.api.v1.handler.model.ResponseError;
-import com.luanpaiva.localizaapi.domain.exception.CepInvalidoException;
 import com.luanpaiva.localizaapi.domain.exception.ClienteNaoLocalizadoException;
 import com.luanpaiva.localizaapi.domain.exception.VeiculoNaoDisponivelException;
 import com.luanpaiva.localizaapi.domain.exception.VeiculoNaoLocalizadoException;
@@ -36,11 +35,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ClienteNaoLocalizadoException.class)
     public ResponseEntity<ResponseError> exceptionHandler(ClienteNaoLocalizadoException e) {
         return status(NOT_FOUND).body(new ResponseError(NOT_FOUND.value(), e.getMessage()));
-    }
-
-    @ExceptionHandler(CepInvalidoException.class)
-    public ResponseEntity<ResponseError> exceptionHandler(CepInvalidoException e) {
-        return status(BAD_REQUEST).body(new ResponseError(BAD_REQUEST.value(), e.getMessage()));
     }
 
     @ExceptionHandler(VeiculoNaoDisponivelException.class)

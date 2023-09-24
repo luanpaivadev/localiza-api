@@ -5,8 +5,9 @@ import com.luanpaiva.localizaapi.adapter.input.api.v1.model.input.ClienteInput;
 import com.luanpaiva.localizaapi.adapter.input.api.v1.openapi.ClienteControllerOpenApi;
 import com.luanpaiva.localizaapi.domain.model.Cliente;
 import com.luanpaiva.localizaapi.domain.port.ClienteServicePort;
-import com.luanpaiva.localizaapi.domain.port.ModelMapperPort;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,8 +28,7 @@ import static java.time.LocalDate.parse;
 public class ClienteController implements ClienteControllerOpenApi {
 
     private final ClienteServicePort clienteServicePort;
-    private final ModelMapperPort<Cliente, ClienteDto> toDtoObject;
-    private final ModelMapperPort<ClienteInput, Cliente> toDomainObject;
+    private final ModelMapper modelMapper;
 
     @Override
     @GetMapping("/{cpf}")
@@ -42,12 +42,12 @@ public class ClienteController implements ClienteControllerOpenApi {
 
     @Override
     @PostMapping
-    public ResponseEntity<ClienteDto> salvarCliente(@RequestBody ClienteInput clienteInput) {
+    public ResponseEntity<ClienteDto> salvarCliente(@RequestBody @Valid ClienteInput clienteInput) {
 
         String cep = clienteInput.getCep();
         LocalDate dataNascimento = formatarDataNascimento(clienteInput);
 
-        Cliente cliente = toDomainObject.map(clienteInput, Cliente.class);
+        Cliente cliente = modelMapper.map(clienteInput, Cliente.class);
         cliente.setCpf(clienteInput.getCpf().replaceAll("\\D", ""));
         cliente.setDataNascimento(dataNascimento);
         cliente = clienteServicePort.salvarCliente(cliente, cep);
@@ -62,6 +62,6 @@ public class ClienteController implements ClienteControllerOpenApi {
     }
 
     private ClienteDto mapToClienteDto(Cliente cliente) {
-        return toDtoObject.map(cliente, ClienteDto.class);
+        return modelMapper.map(cliente, ClienteDto.class);
     }
 }

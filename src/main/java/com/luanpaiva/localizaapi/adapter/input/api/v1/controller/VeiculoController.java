@@ -3,10 +3,10 @@ package com.luanpaiva.localizaapi.adapter.input.api.v1.controller;
 import com.luanpaiva.localizaapi.adapter.input.api.v1.model.dto.VeiculoDto;
 import com.luanpaiva.localizaapi.adapter.input.api.v1.model.input.VeiculoInput;
 import com.luanpaiva.localizaapi.domain.model.Veiculo;
-import com.luanpaiva.localizaapi.domain.port.ModelMapperPort;
 import com.luanpaiva.localizaapi.domain.port.VeiculoServicePort;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,14 +27,13 @@ import java.util.List;
 public class VeiculoController {
 
     private final VeiculoServicePort veiculoServicePort;
-    private final ModelMapperPort<Veiculo, VeiculoDto> toDtoObject;
-    private final ModelMapperPort<VeiculoInput, Veiculo> toDomainObject;
+    private final ModelMapper modelMapper;
 
     @GetMapping
     public ResponseEntity<List<VeiculoDto>> listarVeiculos() {
 
         List<Veiculo> veiculos = veiculoServicePort.buscarListaVeiculos();
-        List<VeiculoDto> veiculoDtoList = veiculos.stream().map(veiculo -> toDtoObject.map(veiculo, VeiculoDto.class)).toList();
+        List<VeiculoDto> veiculoDtoList = veiculos.stream().map(veiculo -> modelMapper.map(veiculo, VeiculoDto.class)).toList();
 
         return ResponseEntity.ok(veiculoDtoList);
     }
@@ -42,9 +41,9 @@ public class VeiculoController {
     @PostMapping
     public ResponseEntity<VeiculoDto> cadastrarNovoVeiculo(@RequestBody @Valid VeiculoInput veiculoInput) {
 
-        Veiculo veiculo = toDomainObject.map(veiculoInput, Veiculo.class);
+        Veiculo veiculo = modelMapper.map(veiculoInput, Veiculo.class);
         veiculo = veiculoServicePort.salvarVeiculo(veiculo);
-        VeiculoDto veiculoDto = toDtoObject.map(veiculo, VeiculoDto.class);
+        VeiculoDto veiculoDto = modelMapper.map(veiculo, VeiculoDto.class);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(veiculoDto);
     }
@@ -54,7 +53,7 @@ public class VeiculoController {
                                                                   @RequestParam BigDecimal valorDiariaVeiculo) {
 
         Veiculo veiculo = veiculoServicePort.atualizarValorDiariaAluguel(placa, valorDiariaVeiculo);
-        VeiculoDto veiculoDto = toDtoObject.map(veiculo, VeiculoDto.class);
+        VeiculoDto veiculoDto = modelMapper.map(veiculo, VeiculoDto.class);
 
         return ResponseEntity.ok(veiculoDto);
     }

@@ -4,8 +4,8 @@ import com.luanpaiva.localizaapi.adapter.input.api.v1.model.dto.AluguelDto;
 import com.luanpaiva.localizaapi.adapter.input.api.v1.model.input.AluguelInput;
 import com.luanpaiva.localizaapi.domain.model.Aluguel;
 import com.luanpaiva.localizaapi.domain.port.AluguelServicePort;
-import com.luanpaiva.localizaapi.domain.port.ModelMapperPort;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +24,7 @@ import java.time.LocalDateTime;
 public class AluguelController {
 
     private final AluguelServicePort aluguelServicePort;
-    private final ModelMapperPort<Aluguel, AluguelDto> toDtoObject;
+    private final ModelMapper modelMapper;
 
     @PostMapping
     public ResponseEntity<AluguelDto> salvarAluguel(@RequestBody AluguelInput aluguelInput) {
@@ -46,6 +46,6 @@ public class AluguelController {
     }
 
     private AluguelDto toDtoObject(Aluguel aluguel) {
-        return toDtoObject.map(aluguel, AluguelDto.class);
+        return modelMapper.map(aluguel, AluguelDto.class);
     }
 }
