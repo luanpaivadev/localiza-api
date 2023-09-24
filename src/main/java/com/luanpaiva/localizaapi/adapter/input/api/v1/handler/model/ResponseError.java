@@ -9,8 +9,8 @@ import lombok.Data;
 @Schema(name = "ResponseError")
 public class ResponseError {
 
-    @Schema(example = "404")
+    @Schema
     private Integer codigo;
-    @Schema(example = "Recurso não encontrado")
+    @Schema
     private String mensagem;
 }

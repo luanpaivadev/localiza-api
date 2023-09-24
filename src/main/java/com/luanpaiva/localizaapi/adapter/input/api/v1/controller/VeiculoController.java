@@ -33,7 +33,9 @@ public class VeiculoController {
     public ResponseEntity<List<VeiculoDto>> listarVeiculos() {
 
         List<Veiculo> veiculos = veiculoServicePort.buscarListaVeiculos();
-        List<VeiculoDto> veiculoDtoList = veiculos.stream().map(veiculo -> modelMapper.map(veiculo, VeiculoDto.class)).toList();
+        List<VeiculoDto> veiculoDtoList = veiculos.stream()
+                .map(veiculo -> modelMapper.map(veiculo, VeiculoDto.class))
+                .toList();
 
         return ResponseEntity.ok(veiculoDtoList);
     }
