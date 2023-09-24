@@ -9,9 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,6 +23,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tbl_aluguel")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Aluguel {
 
     @Id
@@ -32,8 +36,11 @@ public class Aluguel {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Veiculo veiculo;
     private LocalDateTime dataHoraRetirada;
-    private LocalDateTime dataHoraDevolucao;
-    private BigDecimal valor;
+    private LocalDateTime dataHoraDevolucaoPrevista;
+    private LocalDateTime dataHoraDevolucaoEfetivada;
+    private BigDecimal valorPrevisto;
+    private BigDecimal valorExcedente;
+    private BigDecimal valorTotal;
     @Enumerated(EnumType.STRING)
     private StatusAluguel statusAluguel;
 }

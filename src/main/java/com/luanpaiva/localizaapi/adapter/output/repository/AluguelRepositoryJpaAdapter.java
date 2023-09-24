@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Component
 @AllArgsConstructor
 public class AluguelRepositoryJpaAdapter implements AluguelRepositoryPort {
@@ -17,5 +19,10 @@ public class AluguelRepositoryJpaAdapter implements AluguelRepositoryPort {
     @Transactional
     public Aluguel save(Aluguel aluguel) {
         return aluguelRepositoryJpa.save(aluguel);
+    }
+
+    @Override
+    public Optional<Aluguel> findById(Long id) {
+        return aluguelRepositoryJpa.findById(id);
     }
 }

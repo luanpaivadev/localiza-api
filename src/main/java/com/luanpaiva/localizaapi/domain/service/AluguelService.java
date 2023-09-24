@@ -1,6 +1,7 @@
 package com.luanpaiva.localizaapi.domain.service;
 
 import com.luanpaiva.localizaapi.adapter.input.api.v1.model.input.AluguelInput;
+import com.luanpaiva.localizaapi.domain.exception.AluguelNaoEncontradoException;
 import com.luanpaiva.localizaapi.domain.exception.VeiculoNaoDisponivelException;
 import com.luanpaiva.localizaapi.domain.model.Aluguel;
 import com.luanpaiva.localizaapi.domain.model.Cliente;
@@ -16,7 +17,9 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 import static com.luanpaiva.localizaapi.domain.model.StatusAluguel.ABERTO;
+import static com.luanpaiva.localizaapi.domain.model.StatusAluguel.FECHADO;
 import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import static java.math.BigDecimal.valueOf;
 import static java.text.MessageFormat.format;
 import static java.time.Duration.between;
@@ -24,6 +27,7 @@ import static java.time.Duration.between;
 public class AluguelService implements AluguelServicePort {
 
     private static final Boolean NAO = FALSE;
+    private static final Boolean SIM = TRUE;
     private final AluguelRepositoryPort aluguelRepositoryPort;
     private final ClienteServicePort clienteServicePort;
     private final VeiculoServicePort veiculoServicePort;
@@ -57,8 +61,9 @@ public class AluguelService implements AluguelServicePort {
                 .cliente(cliente)
                 .veiculo(veiculo)
                 .dataHoraRetirada(dataHoraRetirada)
-                .dataHoraDevolucao(dataHoraDevolucao)
-                .valor(custoAluguel)
+                .dataHoraDevolucaoPrevista(dataHoraDevolucao)
+                .valorPrevisto(custoAluguel)
+                .valorExcedente(BigDecimal.ZERO)
                 .statusAluguel(ABERTO)
                 .build();
 
@@ -66,13 +71,43 @@ public class AluguelService implements AluguelServicePort {
     }
 
     @Override
-    public BigDecimal calcularCustoAluguel(LocalDateTime dataHoraRetirada, LocalDateTime dataHoraDevolucao,
-                                           BigDecimal valorDiaria) {
+    public Aluguel finalizarAluguel(Long id, LocalDateTime dataHoraDevolucaoEfetivada) {
+
+        Aluguel aluguel = aluguelRepositoryPort.findById(id)
+                .orElseThrow(() -> new AluguelNaoEncontradoException(format("Contrato de aluguel com id {0} não localizado.", id)));
+
+        aluguel.setDataHoraDevolucaoEfetivada(dataHoraDevolucaoEfetivada);
+        BigDecimal valorExcedente = calcularValorExcedente(aluguel, dataHoraDevolucaoEfetivada);
+        aluguel.setValorExcedente(valorExcedente);
+        aluguel.setValorTotal(aluguel.getValorPrevisto().add(aluguel.getValorExcedente()));
+        aluguel.getVeiculo().setDisponivel(SIM);
+        aluguel.setStatusAluguel(FECHADO);
+
+        return aluguelRepositoryPort.save(aluguel);
+    }
+
+    private BigDecimal calcularCustoAluguel(LocalDateTime dataHoraRetirada, LocalDateTime dataHoraDevolucao,
+                                            BigDecimal valorDiaria) {
 
         Duration duracaoAluguel = between(dataHoraRetirada, dataHoraDevolucao);
         BigDecimal duracaoHoras = valueOf((double) duracaoAluguel.toMinutes() / 60);
         BigDecimal custoPorHora = valueOf(valorDiaria.doubleValue() / 24);
 
         return duracaoHoras.multiply(custoPorHora).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private BigDecimal calcularValorExcedente(Aluguel aluguel, LocalDateTime dataHoraDevolucaoEfetivada) {
+
+        LocalDateTime dataHoraDevolucaoPrevista = aluguel.getDataHoraDevolucaoPrevista();
+        BigDecimal valorDiaria = aluguel.getVeiculo().getValorDiariaAluguel();
+        BigDecimal custoPorHora = valueOf(valorDiaria.doubleValue() / 24);
+
+        Duration duration = between(dataHoraDevolucaoPrevista, dataHoraDevolucaoEfetivada);
+        BigDecimal horaExcedente = valueOf((double) duration.toMinutes() / 60);
+        if (horaExcedente.compareTo(BigDecimal.valueOf(1)) <= 0) {
+            return BigDecimal.ZERO;
+        }
+
+        return horaExcedente.multiply(custoPorHora).setScale(2, RoundingMode.HALF_UP);
     }
 }

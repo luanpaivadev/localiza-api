@@ -49,7 +49,7 @@ public class VeiculoController {
         return ResponseEntity.status(HttpStatus.CREATED).body(veiculoDto);
     }
 
-    @PutMapping("/{placa}")
+    @PutMapping("/{placa}/atualizar-valor-diaria")
     public ResponseEntity<VeiculoDto> atualizarValorDiariaVeiculo(@PathVariable String placa,
                                                                   @RequestParam BigDecimal valorDiariaVeiculo) {
 

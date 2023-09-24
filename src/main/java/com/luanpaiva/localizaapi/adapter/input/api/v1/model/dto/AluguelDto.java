@@ -1,7 +1,5 @@
 package com.luanpaiva.localizaapi.adapter.input.api.v1.model.dto;
 
-import com.luanpaiva.localizaapi.domain.model.Veiculo;
-import com.luanpaiva.localizaapi.domain.model.Cliente;
 import com.luanpaiva.localizaapi.domain.model.StatusAluguel;
 import lombok.Data;
 
@@ -12,10 +10,13 @@ import java.time.LocalDateTime;
 public class AluguelDto {
 
     private Long id;
-    private Cliente cliente;
-    private Veiculo veiculo;
+    private ClienteDto cliente;
+    private VeiculoDto veiculo;
     private LocalDateTime dataHoraRetirada;
-    private LocalDateTime dataHoraDevolucao;
-    private BigDecimal valor;
+    private LocalDateTime dataHoraDevolucaoPrevista;
+    private LocalDateTime dataHoraDevolucaoEfetivada;
+    private BigDecimal valorPrevisto;
+    private BigDecimal valorExcedente;
+    private BigDecimal valorTotal;
     private StatusAluguel statusAluguel;
 }
