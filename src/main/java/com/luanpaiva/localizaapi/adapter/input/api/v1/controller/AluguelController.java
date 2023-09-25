@@ -4,8 +4,8 @@ import com.luanpaiva.localizaapi.adapter.input.api.v1.model.dto.AluguelDto;
 import com.luanpaiva.localizaapi.adapter.input.api.v1.model.input.AluguelInput;
 import com.luanpaiva.localizaapi.domain.model.Aluguel;
 import com.luanpaiva.localizaapi.domain.port.AluguelServicePort;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,13 +24,12 @@ import java.time.LocalDateTime;
 public class AluguelController {
 
     private final AluguelServicePort aluguelServicePort;
-    private final ModelMapper modelMapper;
 
     @PostMapping
-    public ResponseEntity<AluguelDto> salvarAluguel(@RequestBody AluguelInput aluguelInput) {
+    public ResponseEntity<AluguelDto> salvarReserva(@RequestBody @Valid AluguelInput aluguelInput) {
 
-        Aluguel aluguel = aluguelServicePort.salvarAluguel(aluguelInput);
-        AluguelDto aluguelDto = toDtoObject(aluguel);
+        Aluguel aluguel = aluguelServicePort.salvarReserva(aluguelInput);
+        AluguelDto aluguelDto = AluguelDto.toAluguelDto(aluguel);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(aluguelDto);
     }
@@ -40,12 +39,8 @@ public class AluguelController {
                                                        @RequestParam LocalDateTime dataHoraDevolucaoEfetivada) {
 
         Aluguel aluguel = aluguelServicePort.finalizarAluguel(id, dataHoraDevolucaoEfetivada);
-        AluguelDto aluguelDto = toDtoObject(aluguel);
+        AluguelDto aluguelDto = AluguelDto.toAluguelDto(aluguel);
 
         return ResponseEntity.ok(aluguelDto);
-    }
-
-    private AluguelDto toDtoObject(Aluguel aluguel) {
-        return modelMapper.map(aluguel, AluguelDto.class);
     }
 }

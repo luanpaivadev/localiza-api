@@ -1,24 +1,21 @@
 package com.luanpaiva.localizaapi.domain.service;
 
 import com.luanpaiva.localizaapi.adapter.input.api.v1.model.response.CepResponse;
-import com.luanpaiva.localizaapi.domain.model.Cliente;
+import com.luanpaiva.localizaapi.domain.model.Endereco;
 import com.luanpaiva.localizaapi.domain.port.CepClientPort;
 import com.luanpaiva.localizaapi.domain.port.CepServicePort;
-import com.luanpaiva.localizaapi.domain.port.ModelMapperPort;
 
 public class CepService implements CepServicePort {
 
     private final CepClientPort cepClientPort;
-    private final ModelMapperPort<CepResponse, Cliente.Endereco> modelMapperPort;
 
-    public CepService(CepClientPort cepClientPort, ModelMapperPort<CepResponse, Cliente.Endereco> modelMapperPort) {
+    public CepService(CepClientPort cepClientPort) {
         this.cepClientPort = cepClientPort;
-        this.modelMapperPort = modelMapperPort;
     }
 
     @Override
-    public Cliente.Endereco consultarEnderecoPorCep(String cep) {
+    public Endereco consultarEnderecoPorCep(String cep) {
         CepResponse cepResponse = cepClientPort.consultarCep(cep);
-        return modelMapperPort.map(cepResponse, Cliente.Endereco.class);
+        return cepResponse.toEndereco();
     }
 }

@@ -1,5 +1,6 @@
 package com.luanpaiva.localizaapi.adapter.output.repository.jpa.entities;
 
+import com.luanpaiva.localizaapi.domain.model.Cliente;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,21 +31,27 @@ public class ClienteEntity {
     private String telefone;
     private String email;
 
-    @Data
-    @Entity
-    @Table(name = "tbl_endereco")
-    @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-    public static class EnderecoEntity {
+    public Cliente toCliente() {
+        Cliente cliente = new Cliente();
+        cliente.setId(id);
+        cliente.setNome(nome);
+        cliente.setCpf(cpf);
+        cliente.setDataNascimento(dataNascimento);
+        cliente.setEndereco(endereco.toEndereco());
+        cliente.setTelefone(telefone);
+        cliente.setEmail(email);
+        return cliente;
+    }
 
-        @Id
-        @EqualsAndHashCode.Include
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        private Long id;
-        private String cep;
-        private String logradouro;
-        private String complemento;
-        private String bairro;
-        private String localidade;
-        private String uf;
+    public static ClienteEntity toClienteEntity(Cliente cliente) {
+        ClienteEntity clienteEntity = new ClienteEntity();
+        clienteEntity.setId(cliente.getId());
+        clienteEntity.setNome(cliente.getNome());
+        clienteEntity.setCpf(cliente.getCpf());
+        clienteEntity.setDataNascimento(cliente.getDataNascimento());
+        clienteEntity.setEndereco(EnderecoEntity.toEnderecoEntity(cliente.getEndereco()));
+        clienteEntity.setTelefone(cliente.getTelefone());
+        clienteEntity.setEmail(cliente.getEmail());
+        return clienteEntity;
     }
 }

@@ -1,5 +1,6 @@
 package com.luanpaiva.localizaapi.adapter.output.repository.jpa.entities;
 
+import com.luanpaiva.localizaapi.domain.model.Aluguel;
 import com.luanpaiva.localizaapi.domain.model.StatusAluguel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -34,7 +35,7 @@ public class AluguelEntity {
     private Long id;
     @ManyToOne
     private ClienteEntity cliente;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade = CascadeType.DETACH)
     private VeiculoEntity veiculo;
     private LocalDateTime dataHoraRetirada;
     private LocalDateTime dataHoraDevolucaoPrevista;
@@ -44,4 +45,34 @@ public class AluguelEntity {
     private BigDecimal valorTotal;
     @Enumerated(EnumType.STRING)
     private StatusAluguel statusAluguel;
+
+    public Aluguel toAluguel() {
+        Aluguel aluguel = new Aluguel();
+        aluguel.setId(id);
+        aluguel.setCliente(cliente.toCliente());
+        aluguel.setVeiculo(veiculo.toVeiculo());
+        aluguel.setDataHoraRetirada(dataHoraRetirada);
+        aluguel.setDataHoraDevolucaoPrevista(dataHoraDevolucaoPrevista);
+        aluguel.setDataHoraDevolucaoEfetivada(dataHoraDevolucaoEfetivada);
+        aluguel.setValorPrevisto(valorPrevisto);
+        aluguel.setValorExcedente(valorExcedente);
+        aluguel.setValorTotal(valorTotal);
+        aluguel.setStatusAluguel(statusAluguel);
+        return aluguel;
+    }
+
+    public static AluguelEntity toAluguelEntity(Aluguel aluguel) {
+        AluguelEntity aluguelEntity = new AluguelEntity();
+        aluguelEntity.setId(aluguel.getId());
+        aluguelEntity.setCliente(ClienteEntity.toClienteEntity(aluguel.getCliente()));
+        aluguelEntity.setVeiculo(VeiculoEntity.toVeiculoEntity(aluguel.getVeiculo()));
+        aluguelEntity.setDataHoraRetirada(aluguel.getDataHoraRetirada());
+        aluguelEntity.setDataHoraDevolucaoPrevista(aluguel.getDataHoraDevolucaoPrevista());
+        aluguelEntity.setDataHoraDevolucaoEfetivada(aluguel.getDataHoraDevolucaoEfetivada());
+        aluguelEntity.setValorPrevisto(aluguel.getValorPrevisto());
+        aluguelEntity.setValorExcedente(aluguel.getValorExcedente());
+        aluguelEntity.setValorTotal(aluguel.getValorTotal());
+        aluguelEntity.setStatusAluguel(aluguel.getStatusAluguel());
+        return aluguelEntity;
+    }
 }

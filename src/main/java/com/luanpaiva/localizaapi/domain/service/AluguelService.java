@@ -39,7 +39,7 @@ public class AluguelService implements AluguelServicePort {
     }
 
     @Override
-    public Aluguel salvarAluguel(AluguelInput aluguelInput) {
+    public Aluguel salvarReserva(AluguelInput aluguelInput) {
 
         String cpf = aluguelInput.getCpfCliente();
         Cliente cliente = clienteServicePort.buscarClientePeloCpf(cpf);
@@ -64,6 +64,7 @@ public class AluguelService implements AluguelServicePort {
         aluguel.setDataHoraDevolucaoPrevista(dataHoraDevolucaoPrevista);
         aluguel.setValorPrevisto(valorPrevisto);
         aluguel.setValorExcedente(BigDecimal.ZERO);
+        aluguel.setValorTotal(aluguel.getValorPrevisto().add(aluguel.getValorExcedente()));
         aluguel.setStatusAluguel(ABERTO);
 
         return aluguelRepositoryPort.save(aluguel);

@@ -7,7 +7,6 @@ import com.luanpaiva.localizaapi.domain.model.Cliente;
 import com.luanpaiva.localizaapi.domain.port.ClienteServicePort;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,25 +16,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-
-import static java.time.LocalDate.parse;
-
 @RestController
 @RequestMapping("/v1/clientes")
 @AllArgsConstructor
 public class ClienteController implements ClienteControllerOpenApi {
 
     private final ClienteServicePort clienteServicePort;
-    private final ModelMapper modelMapper;
 
     @Override
     @GetMapping("/{cpf}")
     public ResponseEntity<ClienteDto> buscarClientePeloCpf(@PathVariable String cpf) {
 
         Cliente cliente = clienteServicePort.buscarClientePeloCpf(cpf);
-        ClienteDto clienteDto = mapToClienteDto(cliente);
+        ClienteDto clienteDto = ClienteDto.toClienteDto(cliente);
 
         return ResponseEntity.ok(clienteDto);
     }
@@ -45,23 +38,11 @@ public class ClienteController implements ClienteControllerOpenApi {
     public ResponseEntity<ClienteDto> salvarCliente(@RequestBody @Valid ClienteInput clienteInput) {
 
         String cep = clienteInput.getCep();
-        LocalDate dataNascimento = formatarDataNascimento(clienteInput);
-
-        Cliente cliente = modelMapper.map(clienteInput, Cliente.class);
-        cliente.setCpf(clienteInput.getCpf().replaceAll("\\D", ""));
-        cliente.setDataNascimento(dataNascimento);
+        Cliente cliente = clienteInput.toCliente();
         cliente = clienteServicePort.salvarCliente(cliente, cep);
-        ClienteDto clienteDto = mapToClienteDto(cliente);
+        ClienteDto clienteDto = ClienteDto.toClienteDto(cliente);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(clienteDto);
     }
 
-    private LocalDate formatarDataNascimento(ClienteInput clienteInput) {
-        String dataNascimento = clienteInput.getDataNascimento();
-        return parse(dataNascimento, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-    }
-
-    private ClienteDto mapToClienteDto(Cliente cliente) {
-        return modelMapper.map(cliente, ClienteDto.class);
-    }
 }

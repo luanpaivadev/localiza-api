@@ -1,8 +1,8 @@
 package com.luanpaiva.localizaapi.domain.port;
 
-import com.luanpaiva.localizaapi.domain.model.Cliente;
+import com.luanpaiva.localizaapi.domain.model.Endereco;
 
 public interface CepServicePort {
 
-    Cliente.Endereco consultarEnderecoPorCep(String cep);
+    Endereco consultarEnderecoPorCep(String cep);
 }

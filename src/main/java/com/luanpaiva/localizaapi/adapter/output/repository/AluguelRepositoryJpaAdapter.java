@@ -5,7 +5,6 @@ import com.luanpaiva.localizaapi.adapter.output.repository.jpa.entities.AluguelE
 import com.luanpaiva.localizaapi.domain.model.Aluguel;
 import com.luanpaiva.localizaapi.domain.port.AluguelRepositoryPort;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,19 +15,18 @@ import java.util.Optional;
 public class AluguelRepositoryJpaAdapter implements AluguelRepositoryPort {
 
     private final AluguelRepositoryJpa aluguelRepositoryJpa;
-    private final ModelMapper modelMapper;
 
     @Override
     @Transactional
     public Aluguel save(Aluguel aluguel) {
-        AluguelEntity aluguelEntity = modelMapper.map(aluguel, AluguelEntity.class);
+        AluguelEntity aluguelEntity = AluguelEntity.toAluguelEntity(aluguel);
         aluguelRepositoryJpa.save(aluguelEntity);
-        return modelMapper.map(aluguelEntity, Aluguel.class);
+        return aluguelEntity.toAluguel();
     }
 
     @Override
     public Optional<Aluguel> findById(Long id) {
         Optional<AluguelEntity> aluguelEntityOptional = aluguelRepositoryJpa.findById(id);
-        return aluguelEntityOptional.map(aluguelEntity -> modelMapper.map(aluguelEntity, Aluguel.class));
+        return aluguelEntityOptional.map(AluguelEntity::toAluguel);
     }
 }

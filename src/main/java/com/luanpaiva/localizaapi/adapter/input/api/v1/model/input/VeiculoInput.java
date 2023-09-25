@@ -1,5 +1,6 @@
 package com.luanpaiva.localizaapi.adapter.input.api.v1.model.input;
 
+import com.luanpaiva.localizaapi.domain.model.Veiculo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -24,4 +25,15 @@ public class VeiculoInput {
     private String placa;
     @NotNull
     private BigDecimal valorDiariaAluguel;
+
+    public Veiculo toVeiculo() {
+        Veiculo veiculo = new Veiculo();
+        veiculo.setFabricante(fabricante);
+        veiculo.setModelo(modelo);
+        veiculo.setAnoFabricacao(anoFabricacao);
+        veiculo.setCor(cor);
+        veiculo.setPlaca(placa);
+        veiculo.setValorDiariaAluguel(valorDiariaAluguel);
+        return veiculo;
+    }
 }

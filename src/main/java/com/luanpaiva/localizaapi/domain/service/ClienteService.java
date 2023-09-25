@@ -2,6 +2,7 @@ package com.luanpaiva.localizaapi.domain.service;
 
 import com.luanpaiva.localizaapi.domain.exception.ClienteNaoLocalizadoException;
 import com.luanpaiva.localizaapi.domain.model.Cliente;
+import com.luanpaiva.localizaapi.domain.model.Endereco;
 import com.luanpaiva.localizaapi.domain.port.CepServicePort;
 import com.luanpaiva.localizaapi.domain.port.ClienteRespositoryPort;
 import com.luanpaiva.localizaapi.domain.port.ClienteServicePort;
@@ -29,7 +30,7 @@ public class ClienteService implements ClienteServicePort {
 
     @Override
     public Cliente salvarCliente(Cliente cliente, String cep) {
-        Cliente.Endereco endereco = cepServicePort.consultarEnderecoPorCep(cep);
+        Endereco endereco = cepServicePort.consultarEnderecoPorCep(cep);
         cliente.setEndereco(endereco);
         return clienteRespositoryPort.save(cliente);
     }

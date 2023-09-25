@@ -5,7 +5,6 @@ import com.luanpaiva.localizaapi.adapter.output.repository.jpa.entities.ClienteE
 import com.luanpaiva.localizaapi.domain.model.Cliente;
 import com.luanpaiva.localizaapi.domain.port.ClienteRespositoryPort;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,19 +15,18 @@ import java.util.Optional;
 public class ClienteRespositoryJpaAdapter implements ClienteRespositoryPort {
 
     private final ClienteRespositoryJpa clienteRespositoryJpa;
-    private final ModelMapper modelMapper;
 
     @Override
     public Optional<Cliente> findByCpf(String cpf) {
         Optional<ClienteEntity> clienteEntityOptional = clienteRespositoryJpa.findByCpf(cpf);
-        return clienteEntityOptional.map(clienteEntity -> modelMapper.map(clienteEntity, Cliente.class));
+        return clienteEntityOptional.map(ClienteEntity::toCliente);
     }
 
     @Override
     @Transactional
     public Cliente save(Cliente cliente) {
-        ClienteEntity clienteEntity = modelMapper.map(cliente, ClienteEntity.class);
+        ClienteEntity clienteEntity = ClienteEntity.toClienteEntity(cliente);
         clienteRespositoryJpa.save(clienteEntity);
-        return modelMapper.map(clienteEntity, Cliente.class);
+        return clienteEntity.toCliente();
     }
 }

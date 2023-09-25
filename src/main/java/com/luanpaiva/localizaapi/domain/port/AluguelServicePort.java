@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public interface AluguelServicePort {
 
-    Aluguel salvarAluguel(AluguelInput aluguelInput);
+    Aluguel salvarReserva(AluguelInput aluguelInput);
 
     Aluguel finalizarAluguel(Long id, LocalDateTime dataHoraDevolucaoEfetivada);
 }

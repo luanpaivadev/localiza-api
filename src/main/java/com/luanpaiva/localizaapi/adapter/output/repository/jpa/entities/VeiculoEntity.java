@@ -1,5 +1,6 @@
 package com.luanpaiva.localizaapi.adapter.output.repository.jpa.entities;
 
+import com.luanpaiva.localizaapi.domain.model.Veiculo;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -27,4 +28,30 @@ public class VeiculoEntity {
     private String placa;
     private BigDecimal valorDiariaAluguel;
     private Boolean disponivel = Boolean.TRUE;
+
+    public Veiculo toVeiculo() {
+        Veiculo veiculo = new Veiculo();
+        veiculo.setId(id);
+        veiculo.setFabricante(fabricante);
+        veiculo.setModelo(modelo);
+        veiculo.setAnoFabricacao(anoFabricacao);
+        veiculo.setCor(cor);
+        veiculo.setPlaca(placa);
+        veiculo.setValorDiariaAluguel(valorDiariaAluguel);
+        veiculo.setDisponivel(disponivel);
+        return veiculo;
+    }
+
+    public static VeiculoEntity toVeiculoEntity(Veiculo veiculo) {
+        VeiculoEntity veiculoEntity = new VeiculoEntity();
+        veiculoEntity.setId(veiculo.getId());
+        veiculoEntity.setFabricante(veiculo.getAnoFabricacao());
+        veiculoEntity.setModelo(veiculo.getModelo());
+        veiculoEntity.setAnoFabricacao(veiculo.getAnoFabricacao());
+        veiculoEntity.setCor(veiculo.getCor());
+        veiculoEntity.setPlaca(veiculo.getPlaca());
+        veiculoEntity.setValorDiariaAluguel(veiculo.getValorDiariaAluguel());
+        veiculoEntity.setDisponivel(veiculo.getDisponivel());
+        return veiculoEntity;
+    }
 }
