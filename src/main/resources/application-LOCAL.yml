@@ -1,22 +1,22 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password: password
+    url: jdbc:postgresql://localhost:5432/localiza-db?createDatabaseIfNotExist=true&serverTimezone=UTC
+    username: postgres
+    password: 0190747e-0f0f-41b9-ada0-d2632b474a1f
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    generate-ddl: true
     show-sql: true
-  h2:
-    console:
-      enabled: true
+
+  flyway:
+    enabled: false
 
 # Spring Doc
-
 springdoc:
   packages-to-scan:
     - com.luanpaiva.localizaapi.adapter.input.api
   paths-to-match:
     - /v1/**
-
 # Spring Doc

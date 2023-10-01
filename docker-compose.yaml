@@ -1,0 +1,42 @@
+version: '3.9'
+
+networks:
+  localiza-network:
+    driver: bridge
+
+services:
+  localiza-db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0190747e-0f0f-41b9-ada0-d2632b474a1f
+      POSTGRES_DB: localiza-db
+    ports:
+      - "5432:5432"
+    networks:
+      - localiza-network
+
+  localiza-api:
+    image: localiza-api
+    command: [
+      "/wait-for-it.sh",
+      "-t",
+      "15",
+      "localiza-db:5432",
+      "--",
+      "java",
+      "-jar",
+      "api.jar"]
+    environment:
+      DB_HOST: localiza-db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 0190747e-0f0f-41b9-ada0-d2632b474a1f
+      POSTGRES_DB: localiza-db
+      PROFILE_ACTIVE: DEV
+      SERVER_PORT: 8080
+    ports:
+      - "8080:8080"
+    networks:
+      - localiza-network
+    depends_on:
+      - localiza-db

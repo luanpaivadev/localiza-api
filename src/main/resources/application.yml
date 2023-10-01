@@ -10,7 +10,7 @@ info:
 spring:
   profiles:
     active:
-      - ${PROFILE_ACTIVE:DEV}
+      - ${PROFILE_ACTIVE:LOCAL}
 
 management:
   endpoint:
