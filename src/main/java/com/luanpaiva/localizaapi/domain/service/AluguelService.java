@@ -28,7 +28,8 @@ public class AluguelService implements AluguelServicePort {
 
     private static final Boolean NAO = FALSE;
     private static final Boolean SIM = TRUE;
-    public static final String O_VEICULO_NAO_ESTA_DISPONIVEL_PARA_ALUGUEL_NO_MOMENTO = "O veículo com placa {0}, não está disponível para aluguel no momento";
+    private static final String O_VEICULO_NAO_ESTA_DISPONIVEL_PARA_ALUGUEL_NO_MOMENTO = "O veículo com placa {0}, não está disponível para aluguel no momento";
+
     private final AluguelRepositoryPort aluguelRepositoryPort;
     private final ClienteServicePort clienteServicePort;
     private final VeiculoServicePort veiculoServicePort;
