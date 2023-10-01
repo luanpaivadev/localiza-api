@@ -2,7 +2,6 @@ package com.luanpaiva.localizaapi.adapter.output.repository.jpa.entities;
 
 import com.luanpaiva.localizaapi.domain.model.Aluguel;
 import com.luanpaiva.localizaapi.domain.model.StatusAluguel;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,18 +23,17 @@ import java.time.LocalDateTime;
 @Builder
 @Entity
 @Table(name = "tbl_aluguel")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(of = "id")
 @AllArgsConstructor
 @NoArgsConstructor
 public class AluguelEntity {
 
     @Id
-    @EqualsAndHashCode.Include
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     private ClienteEntity cliente;
-    @ManyToOne(cascade = CascadeType.DETACH)
+    @ManyToOne
     private VeiculoEntity veiculo;
     private LocalDateTime dataHoraRetirada;
     private LocalDateTime dataHoraDevolucaoPrevista;
