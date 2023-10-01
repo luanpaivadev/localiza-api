@@ -28,6 +28,7 @@ public class AluguelService implements AluguelServicePort {
 
     private static final Boolean NAO = FALSE;
     private static final Boolean SIM = TRUE;
+    public static final String O_VEICULO_NAO_ESTA_DISPONIVEL_PARA_ALUGUEL_NO_MOMENTO = "O veículo com placa {0}, não está disponível para aluguel no momento";
     private final AluguelRepositoryPort aluguelRepositoryPort;
     private final ClienteServicePort clienteServicePort;
     private final VeiculoServicePort veiculoServicePort;
@@ -48,7 +49,7 @@ public class AluguelService implements AluguelServicePort {
         Veiculo veiculo = veiculoServicePort.buscarVeiculoPelaPlaca(placaVeiculo);
 
         if (veiculo.getDisponivel().equals(NAO)) {
-            throw new VeiculoNaoDisponivelException(format("O veículo com placa {0}, não está disponível para aluguel no momento", placaVeiculo));
+            throw new VeiculoNaoDisponivelException(format(O_VEICULO_NAO_ESTA_DISPONIVEL_PARA_ALUGUEL_NO_MOMENTO, placaVeiculo));
         }
 
         veiculo.setDisponivel(NAO);
@@ -67,7 +68,11 @@ public class AluguelService implements AluguelServicePort {
         aluguel.setValorTotal(aluguel.getValorPrevisto().add(aluguel.getValorExcedente()));
         aluguel.setStatusAluguel(ABERTO);
 
-        return aluguelRepositoryPort.save(aluguel);
+        aluguel = aluguelRepositoryPort.save(aluguel);
+
+        veiculoServicePort.salvarVeiculo(veiculo);
+
+        return aluguel;
     }
 
     @Override
