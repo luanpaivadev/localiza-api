@@ -36,7 +36,7 @@ public class ReservaController {
         return ResponseEntity.ok(reservaDtoList);
     }
 
-    @PostMapping
+    @PostMapping("/salvar-reserva")
     public ResponseEntity<ReservaDto> salvarReserva(@RequestBody @Valid ReservaInput reservaInput) {
 
         Reserva reserva = reservaServicePort.salvarReserva(reservaInput);
@@ -45,7 +45,7 @@ public class ReservaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(reservaDto);
     }
 
-    @PutMapping("/finalizar/{id}")
+    @PutMapping("/finalizar-reserva/{id}")
     public ResponseEntity<ReservaDto> finalizarReserva(@PathVariable Long id,
                                                        @RequestParam LocalDateTime dataHoraDevolucaoEfetivada) {
 
