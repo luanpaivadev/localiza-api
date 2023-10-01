@@ -24,7 +24,7 @@ public class VeiculoInput {
     @Length(min = 7, max = 8)
     private String placa;
     @NotNull
-    private BigDecimal valorDiariaAluguel;
+    private BigDecimal valorDiariaReserva;
 
     public Veiculo toVeiculo() {
         Veiculo veiculo = new Veiculo();
@@ -33,7 +33,7 @@ public class VeiculoInput {
         veiculo.setAnoFabricacao(anoFabricacao);
         veiculo.setCor(cor);
         veiculo.setPlaca(placa);
-        veiculo.setValorDiariaAluguel(valorDiariaAluguel);
+        veiculo.setValorDiariaReserva(valorDiariaReserva);
         return veiculo;
     }
 }

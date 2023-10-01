@@ -26,7 +26,7 @@ public class VeiculoEntity {
     private String anoFabricacao;
     private String cor;
     private String placa;
-    private BigDecimal valorDiariaAluguel;
+    private BigDecimal valorDiariaReserva;
     private Boolean disponivel = Boolean.TRUE;
 
     public Veiculo toVeiculo() {
@@ -37,7 +37,7 @@ public class VeiculoEntity {
         veiculo.setAnoFabricacao(anoFabricacao);
         veiculo.setCor(cor);
         veiculo.setPlaca(placa);
-        veiculo.setValorDiariaAluguel(valorDiariaAluguel);
+        veiculo.setValorDiariaReserva(valorDiariaReserva);
         veiculo.setDisponivel(disponivel);
         return veiculo;
     }
@@ -50,7 +50,7 @@ public class VeiculoEntity {
         veiculoEntity.setAnoFabricacao(veiculo.getAnoFabricacao());
         veiculoEntity.setCor(veiculo.getCor());
         veiculoEntity.setPlaca(veiculo.getPlaca());
-        veiculoEntity.setValorDiariaAluguel(veiculo.getValorDiariaAluguel());
+        veiculoEntity.setValorDiariaReserva(veiculo.getValorDiariaReserva());
         veiculoEntity.setDisponivel(veiculo.getDisponivel());
         return veiculoEntity;
     }

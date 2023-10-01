@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-public class Aluguel {
+public class Reserva {
 
     private Long id;
     private Cliente cliente;
@@ -15,7 +15,7 @@ public class Aluguel {
     private BigDecimal valorPrevisto;
     private BigDecimal valorExcedente;
     private BigDecimal valorTotal;
-    private StatusAluguel statusAluguel;
+    private StatusReserva statusReserva;
 
     public Long getId() {
         return id;
@@ -89,20 +89,20 @@ public class Aluguel {
         this.valorTotal = valorTotal;
     }
 
-    public StatusAluguel getStatusAluguel() {
-        return statusAluguel;
+    public StatusReserva getStatusReserva() {
+        return statusReserva;
     }
 
-    public void setStatusAluguel(StatusAluguel statusAluguel) {
-        this.statusAluguel = statusAluguel;
+    public void setStatusReserva(StatusReserva statusReserva) {
+        this.statusReserva = statusReserva;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Aluguel aluguel = (Aluguel) o;
-        return Objects.equals(id, aluguel.id);
+        Reserva reserva = (Reserva) o;
+        return Objects.equals(id, reserva.id);
     }
 
     @Override
@@ -112,7 +112,7 @@ public class Aluguel {
 
     @Override
     public String toString() {
-        return "Aluguel{" +
+        return "Reserva{" +
                 "id=" + id +
                 ", cliente=" + cliente +
                 ", veiculo=" + veiculo +
@@ -122,7 +122,7 @@ public class Aluguel {
                 ", valorPrevisto=" + valorPrevisto +
                 ", valorExcedente=" + valorExcedente +
                 ", valorTotal=" + valorTotal +
-                ", statusAluguel=" + statusAluguel +
+                ", statusReserva=" + statusReserva +
                 '}';
     }
 }

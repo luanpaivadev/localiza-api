@@ -36,6 +36,15 @@ public class VeiculoController {
         return ResponseEntity.ok(veiculoDtoList);
     }
 
+    @GetMapping("buscar-por-placa/{placa}")
+    public ResponseEntity<VeiculoDto> buscarVeiculoPorPlaca(@PathVariable String placa) {
+
+        Veiculo veiculo = veiculoServicePort.buscarVeiculoPelaPlaca(placa);
+        VeiculoDto veiculoDto = VeiculoDto.toVeiculoDto(veiculo);
+
+        return ResponseEntity.ok(veiculoDto);
+    }
+
     @PostMapping
     public ResponseEntity<VeiculoDto> cadastrarNovoVeiculo(@RequestBody @Valid VeiculoInput veiculoInput) {
 
@@ -50,7 +59,7 @@ public class VeiculoController {
     public ResponseEntity<VeiculoDto> atualizarValorDiariaVeiculo(@PathVariable String placa,
                                                                   @RequestParam BigDecimal valorDiariaVeiculo) {
 
-        Veiculo veiculo = veiculoServicePort.atualizarValorDiariaAluguel(placa, valorDiariaVeiculo);
+        Veiculo veiculo = veiculoServicePort.atualizarValorDiariaReserva(placa, valorDiariaVeiculo);
         VeiculoDto veiculoDto = VeiculoDto.toVeiculoDto(veiculo);
 
         return ResponseEntity.ok(veiculoDto);

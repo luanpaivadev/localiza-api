@@ -1,6 +1,6 @@
 package com.luanpaiva.localizaapi.domain.model;
 
-public enum StatusAluguel {
+public enum StatusReserva {
 
     ABERTO, FECHADO;
 }

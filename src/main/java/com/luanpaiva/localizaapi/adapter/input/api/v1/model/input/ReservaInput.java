@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Data
-public class AluguelInput {
+public class ReservaInput {
 
     @NotBlank
     private String cpfCliente;

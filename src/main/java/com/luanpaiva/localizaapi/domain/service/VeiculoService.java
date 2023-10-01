@@ -36,9 +36,9 @@ public class VeiculoService implements VeiculoServicePort {
     }
 
     @Override
-    public Veiculo atualizarValorDiariaAluguel(String placa, BigDecimal valorDiariaVeiculo) {
+    public Veiculo atualizarValorDiariaReserva(String placa, BigDecimal valorDiariaVeiculo) {
         Veiculo veiculo = buscarVeiculoPelaPlaca(placa);
-        veiculo.setValorDiariaAluguel(valorDiariaVeiculo);
+        veiculo.setValorDiariaReserva(valorDiariaVeiculo);
         return salvarVeiculo(veiculo);
     }
 }

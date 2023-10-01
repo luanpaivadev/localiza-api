@@ -14,7 +14,7 @@ public class VeiculoDto {
     private String anoFabricacao;
     private String cor;
     private String placa;
-    private BigDecimal valorDiariaAluguel;
+    private BigDecimal valorDiariaReserva;
     private Boolean disponivel;
 
     public static VeiculoDto toVeiculoDto(Veiculo veiculo) {
@@ -25,7 +25,7 @@ public class VeiculoDto {
         veiculoDto.setAnoFabricacao(veiculo.getAnoFabricacao());
         veiculoDto.setCor(veiculo.getCor());
         veiculoDto.setPlaca(veiculo.getPlaca());
-        veiculoDto.setValorDiariaAluguel(veiculo.getValorDiariaAluguel());
+        veiculoDto.setValorDiariaReserva(veiculo.getValorDiariaReserva());
         veiculoDto.setDisponivel(veiculo.getDisponivel());
         return veiculoDto;
     }

@@ -13,5 +13,5 @@ public interface VeiculoServicePort {
 
     Veiculo salvarVeiculo(Veiculo veiculo);
 
-    Veiculo atualizarValorDiariaAluguel(String placa, BigDecimal valorDiariaVeiculo);
+    Veiculo atualizarValorDiariaReserva(String placa, BigDecimal valorDiariaVeiculo);
 }

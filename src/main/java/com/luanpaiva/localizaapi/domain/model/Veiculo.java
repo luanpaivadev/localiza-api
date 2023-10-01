@@ -11,7 +11,7 @@ public class Veiculo {
     private String anoFabricacao;
     private String cor;
     private String placa;
-    private BigDecimal valorDiariaAluguel;
+    private BigDecimal valorDiariaReserva;
     private Boolean disponivel = Boolean.TRUE;
 
     public Long getId() {
@@ -62,12 +62,12 @@ public class Veiculo {
         this.placa = placa;
     }
 
-    public BigDecimal getValorDiariaAluguel() {
-        return valorDiariaAluguel;
+    public BigDecimal getValorDiariaReserva() {
+        return valorDiariaReserva;
     }
 
-    public void setValorDiariaAluguel(BigDecimal valorDiariaAluguel) {
-        this.valorDiariaAluguel = valorDiariaAluguel;
+    public void setValorDiariaReserva(BigDecimal valorDiariaReserva) {
+        this.valorDiariaReserva = valorDiariaReserva;
     }
 
     public Boolean getDisponivel() {
