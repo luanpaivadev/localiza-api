@@ -34,7 +34,7 @@ public class AluguelController {
         return ResponseEntity.status(HttpStatus.CREATED).body(aluguelDto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/finalizar/{id}")
     public ResponseEntity<AluguelDto> finalizarAluguel(@PathVariable Long id,
                                                        @RequestParam LocalDateTime dataHoraDevolucaoEfetivada) {
 
