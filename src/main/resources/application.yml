@@ -23,3 +23,13 @@ management:
           - health
           - info
           - metrics
+          - prometheus
+  metrics:
+    enable:
+      jvm: true
+    tags:
+      application: app-localiza-api
+  prometheus:
+    metrics:
+      export:
+        enabled: true
