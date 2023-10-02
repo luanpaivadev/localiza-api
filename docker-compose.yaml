@@ -7,6 +7,7 @@ networks:
 services:
   localiza-db:
     image: postgres
+    container_name: localiza-db
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 0190747e-0f0f-41b9-ada0-d2632b474a1f
@@ -18,6 +19,7 @@ services:
 
   localiza-api:
     image: localiza-api
+    container_name: localiza-api
     command: [
       "/wait-for-it.sh",
       "-t",
@@ -40,3 +42,23 @@ services:
       - localiza-network
     depends_on:
       - localiza-db
+
+  prometheus-api:
+    image: prom/prometheus:latest
+    container_name: prometheus-api
+    user: root
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--web.enable-lifecycle'
+    ports:
+      - 9090:9090
+    networks:
+      - localiza-network
+    depends_on:
+      - localiza-api
