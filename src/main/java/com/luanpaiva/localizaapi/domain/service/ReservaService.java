@@ -3,13 +3,15 @@ package com.luanpaiva.localizaapi.domain.service;
 import com.luanpaiva.localizaapi.adapter.input.api.v1.model.input.ReservaInput;
 import com.luanpaiva.localizaapi.domain.exception.ReservaNaoEncontradaException;
 import com.luanpaiva.localizaapi.domain.exception.VeiculoNaoDisponivelException;
-import com.luanpaiva.localizaapi.domain.model.Reserva;
 import com.luanpaiva.localizaapi.domain.model.Cliente;
+import com.luanpaiva.localizaapi.domain.model.DadosEmail;
+import com.luanpaiva.localizaapi.domain.model.Reserva;
 import com.luanpaiva.localizaapi.domain.model.StatusReserva;
 import com.luanpaiva.localizaapi.domain.model.Veiculo;
+import com.luanpaiva.localizaapi.domain.port.ClienteServicePort;
+import com.luanpaiva.localizaapi.domain.port.EnvioEmailPort;
 import com.luanpaiva.localizaapi.domain.port.ReservaRepositoryPort;
 import com.luanpaiva.localizaapi.domain.port.ReservaServicePort;
-import com.luanpaiva.localizaapi.domain.port.ClienteServicePort;
 import com.luanpaiva.localizaapi.domain.port.VeiculoServicePort;
 
 import java.math.BigDecimal;
@@ -36,11 +38,13 @@ public class ReservaService implements ReservaServicePort {
     private final ReservaRepositoryPort reservaRepositoryPort;
     private final ClienteServicePort clienteServicePort;
     private final VeiculoServicePort veiculoServicePort;
+    private final EnvioEmailPort envioEmailPort;
 
-    public ReservaService(ReservaRepositoryPort reservaRepositoryPort, ClienteServicePort clienteServicePort, VeiculoServicePort veiculoServicePort) {
+    public ReservaService(ReservaRepositoryPort reservaRepositoryPort, ClienteServicePort clienteServicePort, VeiculoServicePort veiculoServicePort, EnvioEmailPort envioEmailPort) {
         this.reservaRepositoryPort = reservaRepositoryPort;
         this.clienteServicePort = clienteServicePort;
         this.veiculoServicePort = veiculoServicePort;
+        this.envioEmailPort = envioEmailPort;
     }
 
     @Override
@@ -78,8 +82,8 @@ public class ReservaService implements ReservaServicePort {
         reserva.setStatusReserva(ABERTO);
 
         reserva = reservaRepositoryPort.save(reserva);
-
         veiculoServicePort.salvarVeiculo(veiculo);
+        enviarEmail(cliente, reserva);
 
         return reserva;
     }
@@ -123,5 +127,15 @@ public class ReservaService implements ReservaServicePort {
         }
 
         return horaExcedente.multiply(custoPorHora).setScale(2, RoundingMode.HALF_UP);
+    }
+
+    private void enviarEmail(Cliente cliente, Reserva reserva) {
+
+        DadosEmail dadosEmail = new DadosEmail(
+                cliente.getEmail(),
+                format("{0}, sua reserva {1} está confirmada.", cliente.getNome(), reserva.getId())
+        );
+
+        envioEmailPort.enviarEmail(dadosEmail, reserva);
     }
 }

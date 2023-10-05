@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>Olá, ${reserva.cliente.nome}.</p>
+    <p>Sua reserva foi confirmada com sucesso.</p>
+    <p>É um prazer seguir com você neste caminho.</p>
+    <p>O código da sua reserva é: ${reserva.id}</p>
+</body>
+
+</html>
