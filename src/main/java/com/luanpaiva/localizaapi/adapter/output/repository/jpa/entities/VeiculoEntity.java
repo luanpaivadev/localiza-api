@@ -45,7 +45,7 @@ public class VeiculoEntity {
     public static VeiculoEntity toVeiculoEntity(Veiculo veiculo) {
         VeiculoEntity veiculoEntity = new VeiculoEntity();
         veiculoEntity.setId(veiculo.getId());
-        veiculoEntity.setFabricante(veiculo.getAnoFabricacao());
+        veiculoEntity.setFabricante(veiculo.getFabricante());
         veiculoEntity.setModelo(veiculo.getModelo());
         veiculoEntity.setAnoFabricacao(veiculo.getAnoFabricacao());
         veiculoEntity.setCor(veiculo.getCor());

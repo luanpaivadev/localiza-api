@@ -12,6 +12,22 @@ spring:
     active:
       - ${PROFILE_ACTIVE:LOCAL}
 
+  # Email Settings
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "7a91e21577624f37a2dd@gmail.com"
+    password: lxuyvwtqtrhrtmpu
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  # Email Settings
+
+localiza.email.remetente: Localiza API <7a91e21577624f37a2dd@gmail.com>
+
 management:
   endpoint:
     health:
