@@ -42,7 +42,7 @@ public class JavaMailSenderAdapter implements EnvioEmailPort {
             helper.setText(obterCorpoEmail(reserva), true);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException | TemplateException | IOException e) {
-            log.error("Erro ao enviar email. Error: {}", e.getCause());
+            log.error("Erro ao enviar email. Error: {}", e.getMessage());
         }
     }
 
