@@ -52,10 +52,10 @@
     <p><strong>ID da Reserva:</strong> ${id}</p>
     <p><strong>Cliente:</strong> ${cliente.nome}</p>
     <p><strong>Veículo:</strong> ${veiculo.fabricante} ${veiculo.modelo} (${veiculo.anoFabricacao})</p>
-    <p><strong>Data e Hora de Retirada:</strong> ${dataHoraRetirada?string["dd/MM/yyyy, HH:mm"]}</p>
+    <p><strong>Data e Hora de Retirada:</strong> ${dataHoraRetirada}</p>
 
     <#if dataHoraDevolucaoEfetivada??>
-        <p><strong>Data e Hora de Devolução Efetivada:</strong> ${dataHoraDevolucaoEfetivada?string["dd/MM/yyyy, HH:mm"]}</p>
+        <p><strong>Data e Hora de Devolução Efetivada:</strong> ${dataHoraDevolucaoEfetivada}</p>
     <#else>
         <p><strong>Data e Hora de Devolução Efetivada:</strong> Não disponível</p>
     </#if>
