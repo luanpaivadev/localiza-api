@@ -11,6 +11,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import no.api.freemarker.java8.Java8ObjectWrapper;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
@@ -38,14 +39,16 @@ public class JavaMailSenderAdapter implements EnvioEmailPort {
             helper.setFrom(emailProperties.getRemetente());
             helper.setTo(dadosEmail.destinatario());
             helper.setSubject(dadosEmail.assunto());
-
-            Template template = freeMarkerConfig.getTemplate(EMAIL_CONFIRMACAO_RESERVA_HTML);
-            String corpoEmail = FreeMarkerTemplateUtils.processTemplateIntoString(template, reserva);
-            helper.setText(corpoEmail, true);
-
+            helper.setText(obterCorpoEmail(reserva), true);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException | TemplateException | IOException e) {
             log.error("Erro ao enviar email. Error: {}", e.getCause());
         }
+    }
+
+    private String obterCorpoEmail(Reserva reserva) throws IOException, TemplateException {
+        freeMarkerConfig.setObjectWrapper(new Java8ObjectWrapper(freeMarkerConfig.getIncompatibleImprovements()));
+        Template template = freeMarkerConfig.getTemplate(EMAIL_CONFIRMACAO_RESERVA_HTML);
+        return FreeMarkerTemplateUtils.processTemplateIntoString(template, reserva);
     }
 }

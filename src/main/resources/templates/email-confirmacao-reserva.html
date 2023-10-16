@@ -13,6 +13,7 @@
             background-color: #f4f4f4;
             margin: 0;
             padding: 0;
+            text-align: center;
         }
 
         h1 {
@@ -39,8 +40,16 @@
             max-width: 600px;
             margin: 0 auto;
             background-color: white;
-            padding: 20px;
+            padding: 10px;
             box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .data-hora {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
             margin-top: 20px;
         }
     </style>
@@ -49,31 +58,34 @@
 <body>
 <h1>Detalhes da Reserva</h1>
 <div class="container">
-    <p><strong>ID da Reserva:</strong> ${id}</p>
-    <p><strong>Cliente:</strong> ${cliente.nome}</p>
-    <p><strong>Veículo:</strong> ${veiculo.fabricante} ${veiculo.modelo} (${veiculo.anoFabricacao})</p>
-    <p><strong>Data e Hora de Retirada:</strong> ${dataHoraRetirada}</p>
 
-    <#if dataHoraDevolucaoEfetivada??>
-        <p><strong>Data e Hora de Devolução Efetivada:</strong> ${dataHoraDevolucaoEfetivada}</p>
-    <#else>
-        <p><strong>Data e Hora de Devolução Efetivada:</strong> Não disponível</p>
-    </#if>
+    <p>Olá, ${cliente.nome}</p>
+    <p>Sua reserva foi confirmada com sucesso.</p>
+    <p>É um prazer seguir com você neste caminho.</p>
+    <p>O código da sua reserva é: <span style="font-weight: bold">${id}</span></p>
 
-    <p><strong>Valor Previsto:</strong> ${valorPrevisto?string.currency}</p>
-    <p><strong>Valor Excedente:</strong> ${valorExcedente?string.currency}</p>
-    <p><strong>Valor Total:</strong> ${valorTotal?string.currency}</p>
-    <p><strong>Status da Reserva:</strong> ${statusReserva}</p>
-    <p><strong>Informações do Cliente:</strong></p>
+    <p><strong>Veículo similar a:</strong> ${veiculo.fabricante} ${veiculo.modelo} (${veiculo.anoFabricacao})</p>
+
+    <div class="data-hora">
+        <p><strong>Retirada do veículo:</strong></p>
+        <ul>
+            <li><strong>Data: </strong>${(dataHoraRetirada).format("dd/MM/yyyy")}</li>
+            <li><strong>Hora: </strong>${(dataHoraRetirada).format("HH'h'mm")}</li>
+        </ul>
+    </div>
+    <div class="data-hora">
+        <p><strong>Devolução do veículo:</strong></p>
+        <ul>
+            <li><strong>Data: </strong>${(dataHoraDevolucaoPrevista).format("dd/MM/yyyy")}</li>
+            <li><strong>Hora: </strong>${(dataHoraDevolucaoPrevista).format("HH'h'mm")}</li>
+        </ul>
+    </div>
+
+    <p style="font-size: 24px; font-weight: bold">Confira os detalhes da sua reserva:</p>
     <ul>
-        <li><strong>Nome:</strong> ${cliente.nome}</li>
-        <li><strong>CPF:</strong> ${cliente.cpf}</li>
-        <li><strong>Data de Nascimento:</strong> ${cliente.dataNascimento}</li>
-        <li><strong>Endereço:</strong> ${cliente.endereco.logradouro}, ${cliente.endereco.localidade},
-            ${cliente.endereco.uf}, ${cliente.endereco.cep}
-        </li>
-        <li><strong>Telefone:</strong> ${cliente.telefone}</li>
-        <li><strong>Email:</strong> ${cliente.email}</li>
+        <li><strong>Valor Previsto:</strong> ${valorPrevisto?string.currency}</li>
+        <li><strong>Valor Excedente:</strong> ${valorExcedente?string.currency}</li>
+        <li><strong>Valor Total:</strong> ${valorTotal?string.currency}</li>
     </ul>
 </div>
 </body>
